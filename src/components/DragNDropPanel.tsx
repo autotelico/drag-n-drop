@@ -1,9 +1,17 @@
 import React from "react";
 
 export default function DragNDropPanel(): React.ReactNode {
-    const dragItem1 = <div draggable={true} className="bg-purple-500 p-2">Item 1</div>
-    const dragItem2 = <div draggable={true} className="bg-purple-500 p-2">Item 2</div>
-    
+  const dragItem1 = (
+    <div draggable={true} className="bg-purple-500 p-2">
+      Item 1
+    </div>
+  );
+  const dragItem2 = (
+    <div draggable={true} className="bg-purple-500 p-2">
+      Item 2
+    </div>
+  );
+
   return (
     <div className="mx-auto w-[500px] h-[500px]">
       <h1 className="text-6xl text-center mt-5">Drag And Drop Panel</h1>
@@ -30,26 +38,41 @@ function Dragbox({
   id: string;
   dragItems?: React.ReactNode[];
 }): React.ReactNode {
+  const handleDragStart = (event) => {
+    let item = event.target;
+    const currentBox = item.parentElement.id;
 
-    const handleDragStart = event => {
-        let item = event.target;
-        const rightDragbox = document.querySelector('#right');
-        rightDragbox?.addEventListener('dragover', e => {
-            e.preventDefault();
-        })
+    if (currentBox === "left") {
+      const rightDragbox = document.querySelector("#right");
+      rightDragbox?.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
 
-        rightDragbox?.addEventListener('drop', (e) => {
-            rightDragbox.appendChild(item);
-            item = null;
-        })
+      rightDragbox?.addEventListener("drop", (e) => {
+        rightDragbox.appendChild(item);
+        item = null;
+      });
     }
     
+    if (currentBox === 'right') {
+        const leftDragbox = document.querySelector("#left");
+        leftDragbox?.addEventListener("dragover", (e) => {
+          e.preventDefault();
+        });
+  
+        leftDragbox?.addEventListener("drop", (e) => {
+          leftDragbox.appendChild(item);
+          item = null;
+        });
+    }
+  };
+
   return (
     <>
       <div
-      id={id}
+        id={id}
         className="flex flex-col gap-3 bg-pink-500 p-3 w-[200px] h-[500px]"
-        onDragStart={e => handleDragStart(e)}
+        onDragStart={(e) => handleDragStart(e)}
       >
         {dragItems?.map((dragItem) => dragItem)}
       </div>
